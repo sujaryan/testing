@@ -1,0 +1,179 @@
+.wccb-booking {
+	margin: 1.5em 0;
+	padding: 1.25em;
+	border: 1px solid #e3e6eb;
+	border-radius: 10px;
+	background: #fff;
+	font-family: inherit;
+}
+
+.wccb-booking__header {
+	margin-bottom: 1em;
+}
+
+.wccb-booking__title {
+	margin: 0 0 .25em;
+	font-size: 1.1rem;
+}
+
+.wccb-booking__meta {
+	margin: 0;
+	color: #596579;
+	font-size: .875rem;
+}
+
+.wccb-booking__body {
+	display: grid;
+	grid-template-columns: minmax(260px, 1fr) minmax(180px, 1fr);
+	gap: 1.25em;
+}
+
+@media (max-width: 640px) {
+	.wccb-booking__body {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Calendar */
+.wccb-calendar__nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: .75em;
+}
+
+.wccb-calendar__nav button {
+	background: transparent;
+	border: 1px solid #d7dce4;
+	border-radius: 6px;
+	padding: .25em .6em;
+	cursor: pointer;
+	font-size: 1rem;
+}
+
+.wccb-calendar__nav button:hover {
+	background: #f3f5f9;
+}
+
+.wccb-calendar__title {
+	font-weight: 600;
+}
+
+.wccb-calendar__weekdays,
+.wccb-calendar__grid {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 4px;
+}
+
+.wccb-calendar__weekdays {
+	margin-bottom: 4px;
+	font-size: .75rem;
+	color: #6b7585;
+	text-align: center;
+}
+
+.wccb-calendar__day {
+	aspect-ratio: 1 / 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 1px solid transparent;
+	background: transparent;
+	cursor: pointer;
+	font-size: .9rem;
+	color: #222;
+}
+
+.wccb-calendar__day.is-empty {
+	visibility: hidden;
+	cursor: default;
+}
+
+.wccb-calendar__day.is-available {
+	background: #eaf1fd;
+	color: #1a53d4;
+	font-weight: 600;
+}
+
+.wccb-calendar__day.is-available:hover {
+	background: #d8e4fb;
+}
+
+.wccb-calendar__day.is-selected {
+	background: #1a53d4;
+	color: #fff;
+}
+
+.wccb-calendar__day.is-disabled,
+.wccb-calendar__day.is-past {
+	color: #b0b7c2;
+	cursor: not-allowed;
+}
+
+.wccb-calendar__day.is-today {
+	border-color: #1a53d4;
+}
+
+/* Slots column */
+.wccb-slots {
+	display: flex;
+	flex-direction: column;
+	min-height: 260px;
+}
+
+.wccb-slots__header {
+	font-weight: 600;
+	margin-bottom: .5em;
+}
+
+.wccb-slots__list {
+	display: flex;
+	flex-direction: column;
+	gap: .4em;
+	max-height: 320px;
+	overflow-y: auto;
+	padding-right: 2px;
+}
+
+.wccb-slot {
+	padding: .6em .75em;
+	border-radius: 6px;
+	border: 1px solid #d7dce4;
+	background: #fff;
+	text-align: center;
+	cursor: pointer;
+	font-size: .95rem;
+	transition: border-color .15s, background .15s;
+}
+
+.wccb-slot:hover {
+	border-color: #1a53d4;
+}
+
+.wccb-slot.is-selected {
+	background: #1a53d4;
+	border-color: #1a53d4;
+	color: #fff;
+}
+
+.wccb-slot.is-disabled {
+	opacity: .5;
+	cursor: not-allowed;
+}
+
+.wccb-slots__status {
+	margin-top: .75em;
+	font-size: .85rem;
+	color: #596579;
+	min-height: 1.2em;
+}
+
+/* Summary row in cart/order */
+.wccb-cart-slot {
+	display: block;
+	margin-top: .25em;
+	font-size: .85em;
+	color: #555;
+}

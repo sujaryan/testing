@@ -1,0 +1,13 @@
+.wccb-schedule-table input[type="time"],
+.wccb-overrides-table input[type="time"] {
+	width: 110px;
+}
+
+.wccb-schedule-table td,
+.wccb-overrides-table td {
+	vertical-align: middle;
+}
+
+#wccb_course_data .options_group h4 {
+	margin: 12px 0 4px;
+}
