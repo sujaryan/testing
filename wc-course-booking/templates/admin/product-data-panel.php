@@ -72,11 +72,6 @@ $weekdays = array(
 			<label for="wccb_meeting_url"><?php esc_html_e( 'Default meeting URL', 'wc-course-booking' ); ?></label>
 			<input type="url" id="wccb_meeting_url" name="wccb_meeting_url" value="<?php echo esc_attr( $settings['meeting_url'] ); ?>" placeholder="https://meet.example.com/..." />
 		</p>
-		<p class="form-field">
-			<label for="wccb_google_calendar_id"><?php esc_html_e( 'Google Calendar ID (override)', 'wc-course-booking' ); ?></label>
-			<input type="text" id="wccb_google_calendar_id" name="wccb_google_calendar_id" value="<?php echo esc_attr( (string) get_post_meta( $product_id, '_wccb_google_calendar_id', true ) ); ?>" placeholder="primary" />
-			<span class="description"><?php esc_html_e( 'Leave blank to use the site default set in Course bookings → Settings.', 'wc-course-booking' ); ?></span>
-		</p>
 	</div>
 
 	<div class="options_group">

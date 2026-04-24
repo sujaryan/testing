@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 class WCCB_Install {
 
 	const DB_VERSION_OPTION = 'wccb_db_version';
-	const DB_VERSION        = '1.1.0';
+	const DB_VERSION        = '1.0.0';
 
 	public static function install() {
 		self::create_tables();
@@ -46,8 +46,6 @@ class WCCB_Install {
 			status VARCHAR(32) NOT NULL DEFAULT 'pending',
 			notes TEXT NULL,
 			meeting_url VARCHAR(500) NULL,
-			google_event_id VARCHAR(128) NULL,
-			google_calendar_id VARCHAR(190) NULL,
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY (id),

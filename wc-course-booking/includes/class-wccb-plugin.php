@@ -56,14 +56,11 @@ final class WCCB_Plugin {
 		require_once WCCB_PLUGIN_DIR . 'includes/class-wccb-shortcodes.php';
 		require_once WCCB_PLUGIN_DIR . 'includes/class-wccb-emails.php';
 		require_once WCCB_PLUGIN_DIR . 'includes/class-wccb-frontend.php';
-		require_once WCCB_PLUGIN_DIR . 'includes/integrations/class-wccb-google-oauth.php';
-		require_once WCCB_PLUGIN_DIR . 'includes/integrations/class-wccb-google-calendar.php';
 
 		if ( is_admin() ) {
 			require_once WCCB_PLUGIN_DIR . 'includes/admin/class-wccb-admin.php';
 			require_once WCCB_PLUGIN_DIR . 'includes/admin/class-wccb-admin-bookings.php';
 			require_once WCCB_PLUGIN_DIR . 'includes/admin/class-wccb-admin-courses.php';
-			require_once WCCB_PLUGIN_DIR . 'includes/admin/class-wccb-admin-settings.php';
 		}
 	}
 
@@ -75,14 +72,11 @@ final class WCCB_Plugin {
 		WCCB_Shortcodes::init();
 		WCCB_Emails::init();
 		WCCB_Frontend::init();
-		WCCB_Google_OAuth::init();
-		WCCB_Google_Calendar::init();
 
 		if ( is_admin() ) {
 			WCCB_Admin::init();
 			WCCB_Admin_Bookings::init();
 			WCCB_Admin_Courses::init();
-			WCCB_Admin_Settings::init();
 		}
 	}
 
