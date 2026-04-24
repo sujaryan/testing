@@ -14,11 +14,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! function_exists( 'wccb_seed_log' ) ) {
+	function wccb_seed_log( $msg ) {
+		if ( class_exists( 'WP_CLI' ) ) {
+			WP_CLI::log( $msg );
+		} else {
+			echo $msg . PHP_EOL;
+		}
+	}
+}
+
 function wccb_seed_course( array $args ) {
 	$existing = get_page_by_title( $args['name'], OBJECT, 'product' );
 	if ( $existing ) {
 		$product_id = $existing->ID;
-		WP_CLI::log( "Updating existing course: {$args['name']} (#{$product_id})" );
+		wccb_seed_log( "Updating existing course: {$args['name']} (#{$product_id})" );
 	} else {
 		$product_id = wp_insert_post( array(
 			'post_title'   => $args['name'],
@@ -26,7 +36,7 @@ function wccb_seed_course( array $args ) {
 			'post_status'  => 'publish',
 			'post_type'    => 'product',
 		) );
-		WP_CLI::log( "Created course: {$args['name']} (#{$product_id})" );
+		wccb_seed_log( "Created course: {$args['name']} (#{$product_id})" );
 	}
 
 	wp_set_object_terms( $product_id, 'course_booking', 'product_type' );
