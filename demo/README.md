@@ -1,82 +1,87 @@
-# Live demo environment
+# Live demo
 
-A one-command local sandbox for clicking through `wc-course-booking`.
-Runs WordPress + WooCommerce + the plugin in Docker with two seeded
-demo courses.
+Three ways to click through the plugin end-to-end. Pick the one that
+matches what's available on your machine.
 
-## Requirements
+| Path | Requires | Best when |
+|---|---|---|
+| [Codespaces](#1-github-codespaces) | A GitHub account + a browser | Your laptop is locked down (no sudo, no Docker, no PHP) |
+| [Docker](#2-docker-compose) | Docker Desktop | You have Docker and want parity with a real server |
+| [No-Docker](no-docker/README.md) | PHP 7.4+ on your laptop | You have PHP but not Docker |
 
-- Docker & Docker Compose v2 (ships with Docker Desktop)
-- Port **8080** free on localhost
+---
 
-## Start
+## 1. GitHub Codespaces
 
-```bash
+Zero install on your machine — everything runs in a Codespace, you
+interact through your browser.
+
+1. Visit the repo on GitHub and open this branch.
+2. Click the green **<> Code** button → **Codespaces** tab → **Create
+   codespace on this branch**.
+3. Wait ~1 minute. The post-create script downloads WordPress + the
+   SQLite drop-in + WooCommerce, activates the plugin, and seeds two
+   demo courses.
+4. Once the terminal prompts you, run:
+
+   ```
+   cd demo/no-docker
+   ./bootstrap.sh serve
+   ```
+
+5. Codespaces auto-forwards port 8080 and pops a toast — click **Open
+   in Browser**. Admin login is `admin` / `admin`, demo student is
+   `student` / `student`.
+
+To re-seed from scratch:
+
+```
+./bootstrap.sh reset
+./bootstrap.sh setup
+./bootstrap.sh serve
+```
+
+---
+
+## 2. Docker Compose
+
+Runs WordPress + MariaDB + WooCommerce in containers with the plugin
+mounted live.
+
+```
 cd demo
 docker compose up -d db wordpress
-# Wait ~15s for WP to finish installing its files, then:
 docker compose run --rm wpcli bash /seed/setup.sh
 ```
 
-When setup finishes you should see:
+Open <http://localhost:8080/shop/>. Details in the root of this
+directory.
 
-```
-============================================================
-  Demo ready
-  Shop:       http://localhost:8080/shop/
-  Admin:      http://localhost:8080/wp-admin (admin / admin)
-  Bookings:   http://localhost:8080/wp-admin/admin.php?page=wccb-bookings
-  Student:    student / student
-============================================================
-```
+---
 
-## What to click through
+## 3. No-Docker (local PHP)
 
-1. **`/shop/`** – there are two products:
-   - *Private 1:1 Yoga Coaching* (capacity 1, Mon–Fri 9–17, 60-min slots)
-   - *Group Meditation Class* (capacity 5, Sat+Sun 10–16, 45-min slots)
-2. Open either product. You should see the Calendly-style calendar +
-   slot picker injected into the product page. Future days with
-   availability are highlighted blue; past days are greyed out.
-3. Pick a date, then a time. The slot turns blue and a short-lived hold
-   is placed server-side (table: `wp_wccb_slot_holds`).
-4. Click **Book this course** → **Cart** → **Checkout**. Use the
-   **Cash on delivery** gateway to skip payment during the demo.
-5. On the Thank-you page, WooCommerce flips the order to *Processing*
-   and our plugin creates + confirms a row in `wp_wccb_bookings`.
-6. As admin, visit **Course bookings** in the WP admin menu to see the
-   record; flip statuses; confirm emails were queued (check
-   `wp-content/debug.log`).
-7. Open the Group Meditation product — when capacity is > 1, each slot
-   shows a *"N spots left"* badge.
+See [no-docker/README.md](no-docker/README.md). Runs `php -S` with the
+official SQLite drop-in — no MySQL, no Docker.
 
-## Things you might want to tweak while testing
+---
 
-- **Admin UI layout** – `wc-course-booking/templates/admin/product-data-panel.php`
-- **Student picker markup** – `wc-course-booking/templates/booking-form.php`
-- **Picker styles** – `wc-course-booking/assets/css/frontend.css`
-- **Calendar / slot logic** – `wc-course-booking/assets/js/frontend.js`
-- **Slot generation** – `wc-course-booking/includes/class-wccb-availability.php`
+## What to click through (any path)
 
-Edits on the host update inside the container instantly; just refresh
-the browser.
-
-## Reset
-
-```bash
-docker compose down -v   # drops DB + WP files; next setup.sh rebuilds
-```
-
-## Useful one-liners
-
-```bash
-# tail PHP errors
-docker compose exec wordpress tail -f wp-content/debug.log
-
-# drop into wp-cli
-docker compose run --rm wpcli bash
-
-# inspect the bookings table
-docker compose exec db mariadb -uwp -pwp wordpress \
-  -e "SELECT id, course_id, customer_email, start_datetime, status FROM wp_wccb_bookings ORDER BY id DESC LIMIT 20;"
-```
+1. **Shop** (`/?post_type=product` or `/shop/`) shows two seeded
+   products:
+   - *Private 1:1 Yoga Coaching* — capacity 1, Mon–Fri 9–17, 60-minute
+     slots.
+   - *Group Meditation Class* — capacity 5, Sat+Sun 10–16, 45-minute
+     slots. Because capacity > 1, each time shows a *"N spots left"*
+     badge.
+2. Open a product → calendar + slot picker renders in the product
+   summary.
+3. Pick a date, then a time. A short-lived server-side hold is placed
+   so two tabs can't grab the same slot.
+4. **Book → Cart → Checkout**. Use *Pay on arrival* (COD) to skip a
+   real gateway.
+5. As admin, go to **Course bookings** in the sidebar. The booking
+   appears and you can change its status.
+6. Go back to the product — the slot you just took is gone (capacity-1
+   course) or the remaining count has decremented by 1 (group class).

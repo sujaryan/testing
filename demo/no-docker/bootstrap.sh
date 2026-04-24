@@ -14,7 +14,9 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 SITE="$HERE/site"
 PLUGIN_SRC="$(cd "$HERE/../../wc-course-booking" && pwd)"
 PORT="${PORT:-8080}"
+HOST="${HOST:-localhost}"
 WP_VERSION="${WP_VERSION:-6.5.3}"
+NO_SERVE="${WCCB_NO_SERVE:-0}"
 
 colour_reset=$'\033[0m'
 green=$'\033[32m'
@@ -33,6 +35,14 @@ case "${1:-}" in
 		rm -rf "$SITE"
 		say "Done. Run ./bootstrap.sh again to rebuild."
 		exit 0
+		;;
+	setup)
+		NO_SERVE=1
+		;;
+	serve)
+		[ -f "$SITE/wp-load.php" ] || die "Site not set up yet. Run ./bootstrap.sh setup first."
+		cd "$SITE"
+		exec php -S "${HOST}:${PORT}" -t "$SITE" "$HERE/router.php"
 		;;
 esac
 
@@ -73,7 +83,7 @@ fi
 
 if [ ! -f wp-config.php ]; then
 	say "Writing wp-config.php"
-	cat > wp-config.php <<EOF
+	cat > wp-config.php <<'EOF'
 <?php
 // Demo config — SQLite drop-in ignores DB_* values but requires them.
 define( 'DB_NAME',     'wordpress_demo' );
@@ -83,14 +93,27 @@ define( 'DB_HOST',     'localhost' );
 define( 'DB_CHARSET',  'utf8' );
 define( 'DB_COLLATE',  '' );
 
-\$table_prefix = 'wp_';
+$table_prefix = 'wp_';
 
 define( 'WP_DEBUG',         true );
 define( 'WP_DEBUG_LOG',     true );
 define( 'WP_DEBUG_DISPLAY', false );
 
-define( 'WP_HOME',    'http://localhost:${PORT}' );
-define( 'WP_SITEURL', 'http://localhost:${PORT}' );
+// Trust the forwarded proto when running behind a Codespaces / tunnel proxy.
+if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO'] ) {
+	$_SERVER['HTTPS'] = 'on';
+}
+
+// Derive URLs from the request so the same install works on localhost
+// and on a remote proxied URL (Codespaces, ngrok, etc.).
+if ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
+	$wccb_scheme = ( ! empty( $_SERVER['HTTPS'] ) && 'off' !== $_SERVER['HTTPS'] ) ? 'https' : 'http';
+	define( 'WP_HOME',    $wccb_scheme . '://' . $_SERVER['HTTP_HOST'] );
+	define( 'WP_SITEURL', $wccb_scheme . '://' . $_SERVER['HTTP_HOST'] );
+} else {
+	define( 'WP_HOME',    'http://localhost:8080' );
+	define( 'WP_SITEURL', 'http://localhost:8080' );
+}
 
 define( 'AUTH_KEY',         'wccb-demo-auth-key' );
 define( 'SECURE_AUTH_KEY',  'wccb-demo-secure-auth-key' );
@@ -152,14 +175,19 @@ php "$HERE/install.php"
 
 # --- Serve -----------------------------------------------------------------
 
+if [ "$NO_SERVE" = "1" ]; then
+	say "Setup complete (skipping web server). Run './bootstrap.sh serve' to start."
+	exit 0
+fi
+
 cat <<BANNER
 
 ============================================================
-  Demo ready at  ${yellow}http://localhost:${PORT}/${colour_reset}
+  Demo ready at  ${yellow}http://${HOST}:${PORT}/${colour_reset}
 
-  Admin:     http://localhost:${PORT}/wp-admin/  (admin / admin)
-  Shop:      http://localhost:${PORT}/?post_type=product
-  Bookings:  http://localhost:${PORT}/wp-admin/admin.php?page=wccb-bookings
+  Admin:     http://${HOST}:${PORT}/wp-admin/  (admin / admin)
+  Shop:      http://${HOST}:${PORT}/?post_type=product
+  Bookings:  http://${HOST}:${PORT}/wp-admin/admin.php?page=wccb-bookings
   Student:   student / student
 
   Ctrl+C to stop the server. Run './bootstrap.sh reset' to wipe.
@@ -167,4 +195,4 @@ cat <<BANNER
 BANNER
 
 cd "$SITE"
-exec php -S "localhost:${PORT}" -t "$SITE" "$HERE/router.php"
+exec php -S "${HOST}:${PORT}" -t "$SITE" "$HERE/router.php"

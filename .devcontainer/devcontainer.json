@@ -1,0 +1,23 @@
+{
+	"name": "wc-course-booking live demo",
+	"image": "mcr.microsoft.com/devcontainers/php:1-8.2-bookworm",
+	"forwardPorts": [8080],
+	"portsAttributes": {
+		"8080": {
+			"label": "WordPress demo",
+			"onAutoForward": "openBrowserOnce"
+		}
+	},
+	"postCreateCommand": "bash .devcontainer/post-create.sh",
+	"remoteEnv": {
+		"HOST": "0.0.0.0",
+		"PORT": "8080"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client"
+			]
+		}
+	}
+}
