@@ -89,6 +89,7 @@ class WCCB_Product_Type {
 		$instructor_id   = isset( $_POST['wccb_instructor_id'] ) ? absint( $_POST['wccb_instructor_id'] ) : 0;
 		$meeting_url     = isset( $_POST['wccb_meeting_url'] ) ? esc_url_raw( wp_unslash( $_POST['wccb_meeting_url'] ) ) : '';
 		$increment       = isset( $_POST['wccb_increment'] ) ? max( 5, absint( $_POST['wccb_increment'] ) ) : 30;
+		$g_calendar_id   = isset( $_POST['wccb_google_calendar_id'] ) ? sanitize_text_field( wp_unslash( $_POST['wccb_google_calendar_id'] ) ) : '';
 
 		$schedule_raw = isset( $_POST['wccb_schedule'] ) ? wp_unslash( $_POST['wccb_schedule'] ) : array();
 		$schedule     = array();
@@ -154,6 +155,7 @@ class WCCB_Product_Type {
 		update_post_meta( $product_id, '_wccb_increment', $increment );
 		update_post_meta( $product_id, '_wccb_schedule', $schedule );
 		update_post_meta( $product_id, '_wccb_overrides', $overrides );
+		update_post_meta( $product_id, '_wccb_google_calendar_id', $g_calendar_id );
 	}
 
 	private static function sanitize_hhmm( $value ) {

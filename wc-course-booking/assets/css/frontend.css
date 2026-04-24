@@ -138,14 +138,35 @@
 }
 
 .wccb-slot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: .5em;
 	padding: .6em .75em;
 	border-radius: 6px;
 	border: 1px solid #d7dce4;
 	background: #fff;
-	text-align: center;
+	text-align: left;
 	cursor: pointer;
 	font-size: .95rem;
 	transition: border-color .15s, background .15s;
+}
+
+.wccb-slot__time {
+	font-weight: 500;
+}
+
+.wccb-slot__spots {
+	font-size: .78rem;
+	padding: .1em .5em;
+	border-radius: 999px;
+	background: #eef2f7;
+	color: #4b5565;
+}
+
+.wccb-slot.is-selected .wccb-slot__spots {
+	background: rgba(255, 255, 255, .2);
+	color: #fff;
 }
 
 .wccb-slot:hover {

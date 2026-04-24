@@ -43,9 +43,9 @@ $weekdays = array(
 			<input type="number" id="wccb_window_days" name="wccb_window_days" min="1" value="<?php echo esc_attr( $settings['window_days'] ); ?>" />
 		</p>
 		<p class="form-field">
-			<label for="wccb_capacity"><?php esc_html_e( 'Capacity per slot', 'wc-course-booking' ); ?></label>
+			<label for="wccb_capacity"><?php esc_html_e( 'Bookings per time slot', 'wc-course-booking' ); ?></label>
 			<input type="number" id="wccb_capacity" name="wccb_capacity" min="1" value="<?php echo esc_attr( $settings['capacity'] ); ?>" />
-			<span class="description"><?php esc_html_e( 'How many students can book the same time slot.', 'wc-course-booking' ); ?></span>
+			<span class="description"><?php esc_html_e( 'Set to 1 for Calendly-style 1:1 sessions, or a higher number for group classes. Remaining spots appear next to each time on the student-facing picker.', 'wc-course-booking' ); ?></span>
 		</p>
 		<p class="form-field">
 			<label for="wccb_timezone"><?php esc_html_e( 'Course timezone', 'wc-course-booking' ); ?></label>
@@ -71,6 +71,11 @@ $weekdays = array(
 		<p class="form-field">
 			<label for="wccb_meeting_url"><?php esc_html_e( 'Default meeting URL', 'wc-course-booking' ); ?></label>
 			<input type="url" id="wccb_meeting_url" name="wccb_meeting_url" value="<?php echo esc_attr( $settings['meeting_url'] ); ?>" placeholder="https://meet.example.com/..." />
+		</p>
+		<p class="form-field">
+			<label for="wccb_google_calendar_id"><?php esc_html_e( 'Google Calendar ID (override)', 'wc-course-booking' ); ?></label>
+			<input type="text" id="wccb_google_calendar_id" name="wccb_google_calendar_id" value="<?php echo esc_attr( (string) get_post_meta( $product_id, '_wccb_google_calendar_id', true ) ); ?>" placeholder="primary" />
+			<span class="description"><?php esc_html_e( 'Leave blank to use the site default set in Course bookings → Settings.', 'wc-course-booking' ); ?></span>
 		</p>
 	</div>
 

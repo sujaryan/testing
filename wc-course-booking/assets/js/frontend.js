@@ -184,8 +184,17 @@
 
 		var html = '';
 		slots.forEach(function (s) {
+			var badge = '';
+			if (typeof s.capacity !== 'undefined' && s.capacity > 1) {
+				var word = s.remaining === 1
+					? wccbData.i18n.oneSpotLeft
+					: wccbData.i18n.spotsLeft.replace('%d', s.remaining);
+				badge = '<span class="wccb-slot__spots">' + word + '</span>';
+			}
 			html += '<button type="button" class="wccb-slot" data-slot=\'' + JSON.stringify(s).replace(/'/g, '&apos;') + '\'>'
-				+ s.label + '</button>';
+				+ '<span class="wccb-slot__time">' + s.label + '</span>'
+				+ badge
+				+ '</button>';
 		});
 		this.$slotsList.html(html);
 	};

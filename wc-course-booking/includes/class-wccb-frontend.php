@@ -43,6 +43,8 @@ class WCCB_Frontend {
 					'holding'       => __( 'Reserving your slot…', 'wc-course-booking' ),
 					'heldFor'       => __( 'Slot held for %s minutes. Complete checkout to confirm.', 'wc-course-booking' ),
 					'selectSlot'    => __( 'Please select a time slot first.', 'wc-course-booking' ),
+					'spotsLeft'     => __( '%d spots left', 'wc-course-booking' ),
+					'oneSpotLeft'   => __( '1 spot left', 'wc-course-booking' ),
 					'months'        => array(
 						__( 'January', 'wc-course-booking' ),
 						__( 'February', 'wc-course-booking' ),

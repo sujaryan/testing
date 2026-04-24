@@ -69,6 +69,7 @@ class WCCB_Ajax {
 				'start_utc'   => $slot['start']->setTimezone( new DateTimeZone( 'UTC' ) )->format( 'c' ),
 				'end_utc'     => $slot['end']->setTimezone( new DateTimeZone( 'UTC' ) )->format( 'c' ),
 				'remaining'   => $slot['remaining'],
+				'capacity'    => (int) $settings['capacity'],
 			);
 		}
 
@@ -76,6 +77,7 @@ class WCCB_Ajax {
 			array(
 				'timezone' => $settings['timezone'],
 				'duration' => $settings['duration'],
+				'capacity' => (int) $settings['capacity'],
 				'slots'    => $grouped,
 			)
 		);
